@@ -1,29 +1,29 @@
-# data-platform-api-product-group-reads-rmq-kube
+# data-platform-api-product-stock-reads-rmq-kube
 
-data-platform-api-product-group-reads-rmq-kube は、周辺業務システム　を データ連携基盤 と統合することを目的に、API で品目グループデータを登録するマイクロサービスです。  
-https://xxx.xxx.io/api/API_PRODUCT_GROUP_SRV/creates/
+data-platform-api-product-stock-reads-rmq-kube は、周辺業務システム　を データ連携基盤 と統合することを目的に、API で品目在庫データを登録するマイクロサービスです。  
+https://xxx.xxx.io/api/API_PRODUCT_STOCK_SRV/creates/
 
 ## 動作環境
 
-data-platform-api-product-group-reads-rmq-kube の動作環境は、次の通りです。  
+data-platform-api-product-stock-reads-rmq-kube の動作環境は、次の通りです。  
 ・ OS: LinuxOS （必須）  
 ・ CPU: ARM/AMD/Intel（いずれか必須）  
 
 
 ## 本レポジトリ が 対応する API サービス
-data-platform-api-product-group-reads-rmq-kube が対応する APIサービス は、次のものです。
+data-platform-api-product-stock-reads-rmq-kube が対応する APIサービス は、次のものです。
 
-APIサービス URL: https://xxx.xxx.io/api/API_PRODUCT_GROUP_SRV/reads/
+APIサービス URL: https://xxx.xxx.io/api/API_PRODUCT_STOCK_SRV/reads/
 
 ## 本レポジトリ に 含まれる API名
-data-platform-api-product-group-reads-rmq-kube には、次の API をコールするためのリソースが含まれています。  
+data-platform-api-product-stock-reads-rmq-kube には、次の API をコールするためのリソースが含まれています。  
 
-* A_ProductGroup（データ連携基盤 品目グループ - 品目グループデータ）
-* A_ProductGroupText（データ連携基盤 品目グループ - 品目グループテキストデータ）
+* A_ProductStock（データ連携基盤 品目在庫 - 品目在庫データ）
+* A_ProductStockAvailability（データ連携基盤 品目在庫 - 利用可能在庫在庫データ）
  
 
 ## API への 値入力条件 の 初期値
-data-platform-api-product-group-reads-rmq-kube において、API への値入力条件の初期値は、入力ファイルレイアウトの種別毎に、次の通りとなっています。  
+data-platform-api-product-stock-reads-rmq-kube において、API への値入力条件の初期値は、入力ファイルレイアウトの種別毎に、次の通りとなっています。  
 
 ## データ連携基盤のAPIの選択的コール
 
@@ -33,12 +33,12 @@ Latona および AION の データ連携基盤 関連リソースでは、Input
 * sample.jsonの記載例(1)  
 
 accepter において 下記の例のように、データの種別（＝APIの種別）を指定します。  
-ここでは、"Header" が指定されています。    
+ここでは、"ProductStock", "ProductStockAvailability" が指定されています。    
   
 ```
-	"api_schema": "DPFMProductGroupReads",
-	"accepter": ["ProductGroup", "ProductGroupText"],
-	"product_group": "",
+	"api_schema": "DPFMProductStockReads",
+	"accepter": ["ProductStock", "ProductStockAvailability"],
+	"product_stock": null,
 	"deleted": false
 ```
   
@@ -47,9 +47,9 @@ accepter において 下記の例のように、データの種別（＝APIの�
 全データを取得する場合、sample.json は以下のように記載します。  
 
 ```
-	"api_schema": "DPFMProductGroupReads",
-	"accepter": ["ProductGroup", "ProductGroupText"],
-	"product_group": "",
+	"api_schema": "DPFMProductStockReads",
+	"accepter": ["All"],
+	"product_stock": null,
 	"deleted": false
 ```
 
@@ -59,7 +59,7 @@ accepter における データ種別 の指定に基づいて DPFM_API_Caller �
 caller.go の func() 毎 の 以下の箇所が、指定された API をコールするソースコードです。  
 
 ```
-func (c *DPFMAPICaller) AsyncProductGroupReads(
+func (c *DPFMAPICaller) AsyncProductStockReads(
 	accepter []string,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
@@ -78,45 +78,10 @@ func (c *DPFMAPICaller) AsyncProductGroupReads(
 
 ## Output  
 本マイクロサービスでは、[golang-logging-library-for-data-platform](https://github.com/latonaio/golang-logging-library-for-data-platform) により、以下のようなデータがJSON形式で出力されます。  
-以下の sample.json の例は 品目グループ の ヘッダデータ が取得された結果の JSON の例です。  
-以下の項目のうち、"ProductGroup" ～ "ProductGroupName" は、/DPFM_API_Output_Formatter/type.go 内 の Type ProductGroup {} による出力結果です。"cursor" ～ "time"は、golang-logging-library による 定型フォーマットの出力結果です。  
+以下の sample.json の例は 品目在庫 の 品目在庫データ が取得された結果の JSON の例です。  
+以下の項目のうち、"BusinessPartner" ～ "ProductStock" は、/DPFM_API_Output_Formatter/type.go 内 の Type ProductStock {} による出力結果です。"cursor" ～ "time"は、golang-logging-library による 定型フォーマットの出力結果です。  
 
 ```
-{
-    "connection_key": "request",
-    "result": true,
-    "redis_key": "abcdefg",
-    "filepath": "/var/lib/aion/Data/rededge_sdc/abcdef.json",
-    "api_status_code": 200,
-    "runtime_session_id": "cc9a6f79c6ad4665be140ce25da32560",
-    "business_partner": null,
-    "service_label": "PRODUCT_GROUP",
-    "api_type": "reads",
-    "message": {
-        "ProductGroup": {
-            "ProductGroup": "01"
-        },
-        "ProductGroupText": {
-            "ProductGroup": "01",
-            "Language": "JA",
-            "ProductGroupName": "菓子パン"
-        }
-    },
-    "api_schema": "DPFMProductGroupReads",
-    "accepter": [
-        "ProductGroup",
-        "ProductGroupText"
-    ],
-    "deleted": false,
-    "sql_update_result": null,
-    "sql_update_error": "",
-    "subfunc_result": null,
-    "subfunc_error": "",
-    "exconf_result": null,
-    "exconf_error": "",
-    "api_processing_result": true,
-    "api_processing_error": ""
-}
-
+XXX
 ```
 

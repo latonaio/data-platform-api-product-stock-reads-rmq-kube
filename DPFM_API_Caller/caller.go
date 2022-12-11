@@ -2,9 +2,9 @@ package dpfm_api_caller
 
 import (
 	"context"
-	dpfm_api_input_reader "data-platform-api-product-group-reads-rmq-kube/DPFM_API_Input_Reader"
-	dpfm_api_output_formatter "data-platform-api-product-group-reads-rmq-kube/DPFM_API_Output_Formatter"
-	"data-platform-api-product-group-reads-rmq-kube/config"
+	dpfm_api_input_reader "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Input_Reader"
+	dpfm_api_output_formatter "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Output_Formatter"
+	"data-platform-api-product-stock-reads-rmq-kube/config"
 	"sync"
 
 	"github.com/latonaio/golang-logging-library-for-data-platform/logger"
@@ -30,7 +30,7 @@ func NewDPFMAPICaller(
 	}
 }
 
-func (c *DPFMAPICaller) AsyncProductGroupReads(
+func (c *DPFMAPICaller) AsyncProductStockReads(
 	accepter []string,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,

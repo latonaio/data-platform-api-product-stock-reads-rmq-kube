@@ -2,28 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: data-platform-api-product-group-reads-rmq-kube
-  name: data-platform-api-product-group-reads-rmq-kube
+    run: data-platform-api-product-stock-reads-rmq-kube
+  name: data-platform-api-product-stock-reads-rmq-kube
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: data-platform-api-product-group-reads-rmq-kube
-      app: PRODUCT_GROUP
+      run: data-platform-api-product-stock-reads-rmq-kube
+      app: PRODUCT_STOCK
   template:
     metadata:
       labels:
-        run: data-platform-api-product-group-reads-rmq-kube
-        app: PRODUCT_GROUP
+        run: data-platform-api-product-stock-reads-rmq-kube
+        app: PRODUCT_STOCK
     spec:
-      hostname: data-platform-api-product-group-reads-rmq-kube
+      hostname: data-platform-api-product-stock-reads-rmq-kube
       containers:
-        - name: data-platform-api-product-group-reads-rmq-kube
-          image: latonaio/data-platform-api-product-group-reads-rmq-kube
+        - name: data-platform-api-product-stock-reads-rmq-kube
+          image: latonaio/data-platform-api-product-stock-reads-rmq-kube
           imagePullPolicy: Always
           env:
             - name: "RMQ_QUEUE_FROM"
-              value: "data-platform-api-product-group-reads-queue"
+              value: "data-platform-api-product-stock-reads-queue"
             - name: "RMQ_QUEUE_TO_SQL"
               value: ""
             - name: "RMQ_QUEUE_TO_EX_CONF"
@@ -33,7 +33,7 @@ spec:
             - name: "RMQ_QUEUE_TO_ITEMS_SUB_FUNC"
               value: ""
             - name: "RMQ_SESSION_CONTROL_QUEUE"
-              value: "data-platform-api-product-group-reads-session-control-queue"
+              value: "data-platform-api-product-stock-reads-session-control-queue"
             - name: "DB_NAME"
               value: "DataPlatformMastersAndTransactionsMysqlKube"
           envFrom:
@@ -46,15 +46,15 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: data-platform-api-product-group-reads-rmq-kube
-  name: data-platform-api-product-group-reads-rmq-kube
+    run: data-platform-api-product-stock-reads-rmq-kube
+  name: data-platform-api-product-stock-reads-rmq-kube
 spec:
   selector:
-    run: data-platform-api-product-group-reads-rmq-kube
+    run: data-platform-api-product-stock-reads-rmq-kube
   type: NodePort
   ports:
     - name: api
       port: 8080
       protocol: TCP
       targetPort: 8080
-      nodePort: 30662
+      nodePort: 30656

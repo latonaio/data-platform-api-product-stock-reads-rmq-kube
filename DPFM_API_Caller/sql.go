@@ -2,8 +2,8 @@ package dpfm_api_caller
 
 import (
 	"context"
-	dpfm_api_input_reader "data-platform-api-product-group-reads-rmq-kube/DPFM_API_Input_Reader"
-	dpfm_api_output_formatter "data-platform-api-product-group-reads-rmq-kube/DPFM_API_Output_Formatter"
+	dpfm_api_input_reader "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Input_Reader"
+	dpfm_api_output_formatter "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Output_Formatter"
 	"sync"
 
 	"github.com/latonaio/golang-logging-library-for-data-platform/logger"
@@ -18,50 +18,53 @@ func (c *DPFMAPICaller) readSqlProcess(
 	errs *[]error,
 	log *logger.Logger,
 ) interface{} {
-	var productGroup *dpfm_api_output_formatter.ProductGroup
-	var productGroupText *dpfm_api_output_formatter.ProductGroupText
+	var productStock *dpfm_api_output_formatter.ProductStock
+	var productStockAvailability *dpfm_api_output_formatter.ProductStockAvailability
 	for _, fn := range accepter {
 		switch fn {
-		case "ProductGroup":
+		case "ProductStock":
 			func() {
-				productGroup = c.ProductGroup(mtx, input, output, errs, log)
+				productStock = c.ProductStock(mtx, input, output, errs, log)
 			}()
-		case "ProductGroupText":
+		case "ProductStockAvailability":
 			func() {
-				productGroupText = c.ProductGroupText(mtx, input, output, errs, log)
+				productStockAvailability = c.ProductStockAvailability(mtx, input, output, errs, log)
 			}()
 		default:
 		}
 	}
 
 	data := &dpfm_api_output_formatter.Message{
-		ProductGroup:     productGroup,
-		ProductGroupText: productGroupText,
+		ProductStock:             productStock,
+		ProductStockAvailability: productStockAvailability,
 	}
 
 	return data
 }
 
-func (c *DPFMAPICaller) ProductGroup(
+func (c *DPFMAPICaller) ProductStock(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
 	errs *[]error,
 	log *logger.Logger,
-) *dpfm_api_output_formatter.ProductGroup {
-	productGroup := input.ProductGroup.ProductGroup
+) *dpfm_api_output_formatter.ProductStock {
+	businessPartner := input.ProductStock.BusinessPartner
+	product := input.ProductStock.Product
+	plant := input.ProductStock.Plant
 
 	rows, err := c.db.Query(
-		`SELECT ProductGroup
-		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_group_product_group_data
-		WHERE ProductGroup = ?;`, productGroup,
+		`SELECT BusinessPartner, Product, Plant, StorageLocation, Batch, OrderID, OrderItem, Project, 
+		InventoryStockType, InventorySpecialStockType, ProductStock
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_stock_product_stock_data
+		WHERE (BusinessPartner, Product, Plant) = (?, ?, ?);`, businessPartner, product, plant,
 	)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil
 	}
 
-	data, err := dpfm_api_output_formatter.ConvertToProductGroup(input, rows)
+	data, err := dpfm_api_output_formatter.ConvertToProductStock(input, rows)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil
@@ -70,27 +73,30 @@ func (c *DPFMAPICaller) ProductGroup(
 	return data
 }
 
-func (c *DPFMAPICaller) ProductGroupText(
+func (c *DPFMAPICaller) ProductStockAvailability(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
 	errs *[]error,
 	log *logger.Logger,
-) *dpfm_api_output_formatter.ProductGroupText {
-	productGroup := input.ProductGroup.ProductGroup
-	language := input.ProductGroup.ProductGroupText.Language
+) *dpfm_api_output_formatter.ProductStockAvailability {
+	businessPartner := input.ProductStock.BusinessPartner
+	product := input.ProductStock.Product
+	plant := input.ProductStock.Plant
+	productStockAvailabilityDate := input.ProductStock.ProductStockAvailability.ProductStockAvailabilityDate
 
 	rows, err := c.db.Query(
-		`SELECT ProductGroup, Language, ProductGroupName
-		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_group_product_group_text_data
-		WHERE (ProductGroup, Language) = (?, ?);`, productGroup, language,
+		`SELECT BusinessPartner, Product, Plant, Batch, BatchValidityEndDate, OrderID, OrderItem, Project, 
+		InventoryStockType, InventorySpecialStockType, ProductStockAvailabilityDate, AvailableProductStock
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_stock_availability_data
+		WHERE (BusinessPartner, Product, Plant, ProductStockAvailabilityDate) = (?, ?, ?, ?);`, businessPartner, product, plant, productStockAvailabilityDate,
 	)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil
 	}
 
-	data, err := dpfm_api_output_formatter.ConvertToProductGroupText(input, rows)
+	data, err := dpfm_api_output_formatter.ConvertToProductStockAvailability(input, rows)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil

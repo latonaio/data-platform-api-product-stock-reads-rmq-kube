@@ -1,10 +1,10 @@
 package main
 
 import (
-	dpfm_api_caller "data-platform-api-product-group-reads-rmq-kube/DPFM_API_Caller"
-	dpfm_api_input_reader "data-platform-api-product-group-reads-rmq-kube/DPFM_API_Input_Reader"
-	dpfm_api_output_formatter "data-platform-api-product-group-reads-rmq-kube/DPFM_API_Output_Formatter"
-	"data-platform-api-product-group-reads-rmq-kube/config"
+	dpfm_api_caller "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Caller"
+	dpfm_api_input_reader "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Input_Reader"
+	dpfm_api_output_formatter "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Output_Formatter"
+	"data-platform-api-product-stock-reads-rmq-kube/config"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -75,7 +75,7 @@ func callProcess(rmq *rabbitmq.RabbitmqClient, caller *dpfm_api_caller.DPFMAPICa
 	}
 
 	accepter := getAccepter(&input)
-	res, errs := caller.AsyncProductGroupReads(accepter, &input, &output, l)
+	res, errs := caller.AsyncProductStockReads(accepter, &input, &output, l)
 	if len(errs) != 0 {
 		for _, err := range errs {
 			l.Error(err)
@@ -103,7 +103,7 @@ func getAccepter(input *dpfm_api_input_reader.SDC) []string {
 
 	if accepter[0] == "All" {
 		accepter = []string{
-			"ProductGroup", "ProductGroupText", 
+			"ProductStock", "ProductStockAvailability",
 		}
 	}
 	return accepter

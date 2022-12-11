@@ -6,17 +6,33 @@
 	"api_status_code": 200,
 	"runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
 	"business_partner": null,
-	"service_label": "PRODUCT_GROUP",
+	"service_label": "PRODUCT_STOCK",
 	"api_type": "",
-	"ProductGroup": {
-		"ProductGroup": "01",
-		"ProductGroupText" :{
-			"Language": "JA",
-			"ProductGroupName": ""
+	"ProductStock": {
+		"BusinessPartner": null,
+		"Product": "",
+		"Plant": "",
+		"StorageLocation": "",
+		"Batch": "",
+		"OrderID": null,
+		"OrderItem": null,
+		"Project": "",
+		"InventoryStockType": "",
+		"InventorySpecialStockType": "",
+		"ProductStock": null,
+		"ProductStockAvailability" :{
+			"BatchValidityEndDate": "",
+			"OrderID": null,
+			"OrderItem": null,
+			"Project": "",
+			"InventoryStockType": "",
+			"InventorySpecialStockType": "",
+			"ProductStockAvailabilityDate": "",
+			"AvailableProductStock": null
 		}
 	},
-	"api_schema": "DPFMProductGroupReads",
-	"accepter": ["ProductGroup", "ProductGroupText"],
-	"product_group": "",
+	"api_schema": "DPFMProductStockReads",
+	"accepter": ["ProductStock", "ProductStockAvailability"],
+	"product_stock": null,
 	"deleted": false
 }

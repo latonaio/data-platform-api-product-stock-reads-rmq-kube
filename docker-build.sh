@@ -3,7 +3,7 @@
 PUSH=$1
 DATE="$(date "+%Y%m%d%H%M")"
 REPOSITORY_PREFIX="latonaio"
-SERVICE_NAME="data-platform-api-product-group-reads-rmq-kube"
+SERVICE_NAME="data-platform-api-product-stock-reads-rmq-kube"
 
 DOCKER_BUILDKIT=1 docker build --progress=plain -t ${SERVICE_NAME}:"${DATE}" . --no-cache
 

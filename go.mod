@@ -1,4 +1,4 @@
-module data-platform-api-product-group-reads-rmq-kube
+module data-platform-api-product-stock-reads-rmq-kube
 
 go 1.19
 

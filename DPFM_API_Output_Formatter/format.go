@@ -1,14 +1,14 @@
 package dpfm_api_output_formatter
 
 import (
-	"data-platform-api-product-group-reads-rmq-kube/DPFM_API_Caller/requests"
-	api_input_reader "data-platform-api-product-group-reads-rmq-kube/DPFM_API_Input_Reader"
+	"data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Caller/requests"
+	api_input_reader "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Input_Reader"
 	"database/sql"
 	"fmt"
 )
 
-func ConvertToProductGroup(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductGroup, error) {
-	pm := &requests.ProductGroup{}
+func ConvertToProductStock(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductStock, error) {
+	pm := &requests.ProductStock{}
 
 	for i := 0; true; i++ {
 		if !rows.Next() {
@@ -19,7 +19,17 @@ func ConvertToProductGroup(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductG
 			}
 		}
 		err := rows.Scan(
-			&pm.ProductGroup,
+			&pm.BusinessPartner,
+			&pm.Product,
+			&pm.Plant,
+			&pm.StorageLocation,
+			&pm.Batch,
+			&pm.OrderID,
+			&pm.OrderItem,
+			&pm.Project,
+			&pm.InventoryStockType,
+			&pm.InventorySpecialStockType,
+			&pm.ProductStock,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -28,14 +38,24 @@ func ConvertToProductGroup(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductG
 	}
 	data := pm
 
-	productGroup := &ProductGroup{
-		ProductGroup: data.ProductGroup,
+	productStock := &ProductStock{
+		BusinessPartner:           data.BusinessPartner,
+		Product:                   data.Product,
+		Plant:                     data.Plant,
+		StorageLocation:           data.StorageLocation,
+		Batch:                     data.Batch,
+		OrderID:                   data.OrderID,
+		OrderItem:                 data.OrderItem,
+		Project:                   data.Project,
+		InventoryStockType:        data.InventoryStockType,
+		InventorySpecialStockType: data.InventorySpecialStockType,
+		ProductStock:              data.ProductStock,
 	}
-	return productGroup, nil
+	return productStock, nil
 }
 
-func ConvertToProductGroupText(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductGroupText, error) {
-	pm := &requests.ProductGroupText{}
+func ConvertToProductStockAvailability(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductStockAvailability, error) {
+	pm := &requests.ProductStockAvailability{}
 
 	for i := 0; true; i++ {
 		if !rows.Next() {
@@ -46,9 +66,18 @@ func ConvertToProductGroupText(sdc *api_input_reader.SDC, rows *sql.Rows) (*Prod
 			}
 		}
 		err := rows.Scan(
-			&pm.ProductGroup,
-			&pm.Language,
-			&pm.ProductGroupName,
+			&pm.BusinessPartner,
+			&pm.Product,
+			&pm.Plant,
+			&pm.Batch,
+			&pm.BatchValidityEndDate,
+			&pm.OrderID,
+			&pm.OrderItem,
+			&pm.Project,
+			&pm.InventoryStockType,
+			&pm.InventorySpecialStockType,
+			&pm.ProductStockAvailabilityDate,
+			&pm.AvailableProductStock,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -57,10 +86,19 @@ func ConvertToProductGroupText(sdc *api_input_reader.SDC, rows *sql.Rows) (*Prod
 	}
 	data := pm
 
-	productGroupText := &ProductGroupText{
-		ProductGroup:     data.ProductGroup,
-		Language:         data.Language,
-		ProductGroupName: data.ProductGroupName,
+	productStockAvailability := &ProductStockAvailability{
+		BusinessPartner:              data.BusinessPartner,
+		Product:                      data.Product,
+		Plant:                        data.Plant,
+		Batch:                        data.Batch,
+		BatchValidityEndDate:         data.BatchValidityEndDate,
+		OrderID:                      data.OrderID,
+		OrderItem:                    data.OrderItem,
+		Project:                      data.Project,
+		InventoryStockType:           data.InventoryStockType,
+		InventorySpecialStockType:    data.InventorySpecialStockType,
+		ProductStockAvailabilityDate: data.ProductStockAvailabilityDate,
+		AvailableProductStock:        data.AvailableProductStock,
 	}
-	return productGroupText, nil
+	return productStockAvailability, nil
 }
