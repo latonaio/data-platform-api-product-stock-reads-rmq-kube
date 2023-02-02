@@ -19,7 +19,7 @@ APIサービス URL: https://xxx.xxx.io/api/API_PRODUCT_STOCK_SRV/reads/
 data-platform-api-product-stock-reads-rmq-kube には、次の API をコールするためのリソースが含まれています。  
 
 * A_ProductStock（データ連携基盤 品目在庫 - 品目在庫データ）
-* A_ProductStockAvailability（データ連携基盤 品目在庫 - 利用可能在庫在庫データ）
+* A_ProductStockAvailability（データ連携基盤 品目在庫 - 品目在庫利用可能性データ）
  
 
 ## API への 値入力条件 の 初期値

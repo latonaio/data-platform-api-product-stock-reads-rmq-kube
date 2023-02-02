@@ -63,8 +63,9 @@ func (c *DPFMAPICaller) ProductStock(
 		*errs = append(*errs, err)
 		return nil
 	}
+	defer rows.Close()
 
-	data, err := dpfm_api_output_formatter.ConvertToProductStock(input, rows)
+	data, err := dpfm_api_output_formatter.ConvertToProductStock(rows)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil
@@ -95,8 +96,9 @@ func (c *DPFMAPICaller) ProductStockAvailability(
 		*errs = append(*errs, err)
 		return nil
 	}
+	defer rows.Close()
 
-	data, err := dpfm_api_output_formatter.ConvertToProductStockAvailability(input, rows)
+	data, err := dpfm_api_output_formatter.ConvertToProductStockAvailability(rows)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil

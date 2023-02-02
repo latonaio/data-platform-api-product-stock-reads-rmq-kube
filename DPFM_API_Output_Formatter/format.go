@@ -2,22 +2,17 @@ package dpfm_api_output_formatter
 
 import (
 	"data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Caller/requests"
-	api_input_reader "data-platform-api-product-stock-reads-rmq-kube/DPFM_API_Input_Reader"
 	"database/sql"
 	"fmt"
 )
 
-func ConvertToProductStock(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductStock, error) {
+func ConvertToProductStock(rows *sql.Rows) (*ProductStock, error) {
+	defer rows.Close()
 	pm := &requests.ProductStock{}
 
-	for i := 0; true; i++ {
-		if !rows.Next() {
-			if i == 0 {
-				return nil, fmt.Errorf("DBに対象のレコードが存在しません。")
-			} else {
-				break
-			}
-		}
+	i := 0
+	for rows.Next() {
+		i++
 		err := rows.Scan(
 			&pm.BusinessPartner,
 			&pm.Product,
@@ -36,8 +31,8 @@ func ConvertToProductStock(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductS
 			return nil, err
 		}
 	}
-	data := pm
 
+	data := pm
 	productStock := &ProductStock{
 		BusinessPartner:           data.BusinessPartner,
 		Product:                   data.Product,
@@ -51,20 +46,21 @@ func ConvertToProductStock(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductS
 		InventorySpecialStockType: data.InventorySpecialStockType,
 		ProductStock:              data.ProductStock,
 	}
+	if i == 0 {
+		fmt.Printf("DBに対象のレコードが存在しません。")
+		return nil, nil
+	}
+
 	return productStock, nil
 }
 
-func ConvertToProductStockAvailability(sdc *api_input_reader.SDC, rows *sql.Rows) (*ProductStockAvailability, error) {
+func ConvertToProductStockAvailability(rows *sql.Rows) (*ProductStockAvailability, error) {
+	defer rows.Close()
 	pm := &requests.ProductStockAvailability{}
 
-	for i := 0; true; i++ {
-		if !rows.Next() {
-			if i == 0 {
-				return nil, fmt.Errorf("DBに対象のレコードが存在しません。")
-			} else {
-				break
-			}
-		}
+	i := 0
+	for rows.Next() {
+		i++
 		err := rows.Scan(
 			&pm.BusinessPartner,
 			&pm.Product,
@@ -84,8 +80,12 @@ func ConvertToProductStockAvailability(sdc *api_input_reader.SDC, rows *sql.Rows
 			return nil, err
 		}
 	}
-	data := pm
+	if i == 0 {
+		fmt.Printf("DBに対象のレコードが存在しません。")
+		return nil, nil
+	}
 
+	data := pm
 	productStockAvailability := &ProductStockAvailability{
 		BusinessPartner:              data.BusinessPartner,
 		Product:                      data.Product,
