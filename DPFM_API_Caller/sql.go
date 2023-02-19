@@ -54,8 +54,8 @@ func (c *DPFMAPICaller) ProductStock(
 	plant := input.ProductStock.Plant
 
 	rows, err := c.db.Query(
-		`SELECT BusinessPartner, Product, Plant, StorageLocation, Batch, OrderID, OrderItem, Project, 
-		InventoryStockType, InventorySpecialStockType, ProductStock
+		`SELECT BusinessPartner, Product, Plant, Batch, ProductStockAvailabilityDate, OrderID, OrderItem, Project,
+		InventoryStockType, InventorySpecialStockType, AvailableProductStock
 		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_stock_product_stock_data
 		WHERE (BusinessPartner, Product, Plant) = (?, ?, ?);`, businessPartner, product, plant,
 	)
@@ -87,11 +87,10 @@ func (c *DPFMAPICaller) ProductStockAvailability(
 	productStockAvailabilityDate := input.ProductStock.ProductStockAvailability.ProductStockAvailabilityDate
 
 	rows, err := c.db.Query(
-		`SELECT BusinessPartner, Product, Plant, Batch, BatchValidityEndDate, OrderID, OrderItem, Project, 
-		InventoryStockType, InventorySpecialStockType, ProductStockAvailabilityDate, AvailableProductStock
+		`SELECT BusinessPartner, Product, Plant, Batch, ProductStockAvailabilityDate, OrderID, OrderItem, Project, 
+        InventoryStockType, InventorySpecialStockType, AvailableProductStock
 		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_stock_availability_data
-		WHERE (BusinessPartner, Product, Plant, ProductStockAvailabilityDate) = (?, ?, ?, ?);`, businessPartner, product, plant, productStockAvailabilityDate,
-	)
+		WHERE (BusinessPartner, Product, Plant, ProductStockAvailabilityDate) = (?, ?, ?, ?);`, businessPartner, product, plant, productStockAvailabilityDate,	)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil

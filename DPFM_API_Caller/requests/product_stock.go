@@ -1,15 +1,15 @@
 package requests
 
 type ProductStock struct {
-	BusinessPartner           int      `json:"BusinessPartner"`
-	Product                   string   `json:"Product"`
-	Plant                     string   `json:"Plant"`
-	StorageLocation           *string  `json:"StorageLocation"`
-	Batch                     *string  `json:"Batch"`
-	OrderID                   *int     `json:"OrderID"`
-	OrderItem                 *int     `json:"OrderItem"`
-	Project                   *string  `json:"Project"`
-	InventoryStockType        *string  `json:"InventoryStockType"`
-	InventorySpecialStockType *string  `json:"InventorySpecialStockType"`
-	ProductStock              *float32 `json:"ProductStock"`
+	BusinessPartner                 int      `json:"BusinessPartner"`
+	Product                         string   `json:"Product"`
+	Plant                           string   `json:"Plant"`
+	Batch                           *string  `json:"Batch"`
+	ProductStockAvailabilityDate    *string  `json:"ProductStockAvailabilityDate`
+	OrderID                         *int     `json:"OrderID"`
+	OrderItem                       *int     `json:"OrderItem"`
+	Project                         *string  `json:"Project"`
+	InventoryStockType              *string  `json:"InventoryStockType"`
+	InventorySpecialStockType       *string  `json:"InventorySpecialStockType"`
+	AvailableProductStock           *float32 `json:"AvailableProductStock"`
 }
