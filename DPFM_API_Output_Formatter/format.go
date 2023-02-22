@@ -23,7 +23,7 @@ func ConvertToProductStock(rows *sql.Rows) (*ProductStock, error) {
 			&pm.Project,
 			&pm.InventoryStockType,
 			&pm.InventorySpecialStockType,
-			&pm.ProductStock,
+			&pm.AvailableProductStock,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -33,16 +33,16 @@ func ConvertToProductStock(rows *sql.Rows) (*ProductStock, error) {
 
 	data := pm
 	productStock := &ProductStock{
-		BusinessPartner:             data.BusinessPartner,
-		Product:                     data.Product,
-		Plant:                       data.Plant,
-		Batch:                       data.Batch,
-		OrderID:                     data.OrderID,
-		OrderItem:                   data.OrderItem,
-		Project:                     data.Project,
-		InventoryStockType:          data.InventoryStockType,
-		InventorySpecialStockType:   data.InventorySpecialStockType,
-		ProductStock:                data.ProductStock,
+		BusinessPartner:           data.BusinessPartner,
+		Product:                   data.Product,
+		Plant:                     data.Plant,
+		Batch:                     data.Batch,
+		OrderID:                   data.OrderID,
+		OrderItem:                 data.OrderItem,
+		Project:                   data.Project,
+		InventoryStockType:        data.InventoryStockType,
+		InventorySpecialStockType: data.InventorySpecialStockType,
+		AvailableProductStock:     data.AvailableProductStock,
 	}
 	if i == 0 {
 		fmt.Printf("DBに対象のレコードが存在しません。")
@@ -64,7 +64,7 @@ func ConvertToProductStockAvailability(rows *sql.Rows) (*ProductStockAvailabilit
 			&pm.Product,
 			&pm.Plant,
 			&pm.Batch,
-			&pm.BatchValidityEndDate,
+			&pm.ProductStockAvailabilityDate,
 			&pm.OrderID,
 			&pm.OrderItem,
 			&pm.Project,
@@ -85,17 +85,17 @@ func ConvertToProductStockAvailability(rows *sql.Rows) (*ProductStockAvailabilit
 
 	data := pm
 	productStockAvailability := &ProductStockAvailability{
-		BusinessPartner:                    data.BusinessPartner,
-		Product:                            data.Product,
-		Plant:                              data.Plant,
-		Batch:                              data.Batch,
-		ProductStockAvailabilityDate:       data.ProductStockAvailabilityDate,
-		OrderID:                            data.OrderID,
-		OrderItem:                          data.OrderItem,
-		Project:                            data.Project,
-		InventoryStockType:                 data.InventoryStockType,
-		InventorySpecialStockType:          data.InventorySpecialStockType,
-		AvailableProductStock:              data.AvailableProductStock,
+		BusinessPartner:              data.BusinessPartner,
+		Product:                      data.Product,
+		Plant:                        data.Plant,
+		Batch:                        data.Batch,
+		ProductStockAvailabilityDate: data.ProductStockAvailabilityDate,
+		OrderID:                      data.OrderID,
+		OrderItem:                    data.OrderItem,
+		Project:                      data.Project,
+		InventoryStockType:           data.InventoryStockType,
+		InventorySpecialStockType:    data.InventorySpecialStockType,
+		AvailableProductStock:        data.AvailableProductStock,
 	}
 	return productStockAvailability, nil
 }
