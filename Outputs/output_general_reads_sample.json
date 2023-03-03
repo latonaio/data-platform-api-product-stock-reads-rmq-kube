@@ -4,24 +4,40 @@
     "redis_key": "abcdefg",
     "filepath": "/var/lib/aion/Data/rededge_sdc/abcdef.json",
     "api_status_code": 200,
-    "runtime_session_id": "cc9a6f79c6ad4665be140ce25da32560",
-    "business_partner": null,
-    "service_label": "PRODUCT_GROUP",
-    "api_type": "reads",
+    "runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
+    "business_partner": 101,
+    "service_label": "PRODUCT_STOCK",
+    "api_type": "",
     "message": {
-        "ProductGroup": {
-            "ProductGroup": "01"
+        "ProductStock": {
+            "BusinessPartner": 101,
+            "Product": "A3750",
+            "Plant": "AB01",
+            "Batch": "A001",
+            "OrderID": 14,
+            "OrderItem": 1,
+            "Project": null,
+            "InventoryStockType": null,
+            "InventorySpecialStockType": null,
+            "ProductStock": 10
         },
-        "ProductGroupText": {
-            "ProductGroup": "01",
-            "Language": "JA",
-            "ProductGroupName": "菓子パン"
+        "ProductStockAvailability": {
+            "BusinessPartner": 101,
+            "Product": "A3750",
+            "Plant": "AB01",
+            "Batch": "A001",
+            "ProductStockAvailabilityDate": "2023-02-15",
+            "OrderID": null,
+            "OrderItem": null,
+            "Project": null,
+            "InventoryStockType": null,
+            "InventorySpecialStockType": null,
+            "AvailableProductStock": 5
         }
     },
-    "api_schema": "DPFMProductGroupReads",
+    "api_schema": "DPFMProductStockReads",
     "accepter": [
-        "ProductGroup",
-        "ProductGroupText"
+        "All"
     ],
     "deleted": false,
     "sql_update_result": null,

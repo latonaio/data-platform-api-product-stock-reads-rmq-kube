@@ -4,8 +4,8 @@ type ProductStockAvailability struct {
 	BusinessPartner              int      `json:"BusinessPartner"`
 	Product                      string   `json:"Product"`
 	Plant                        string   `json:"Plant"`
-	Batch                        *string  `json:"Batch"`
-	ProductStockAvailabilityDate *string  `json:"ProductStockAvailabilityDate"`
+	Batch                        string   `json:"Batch"`
+	ProductStockAvailabilityDate string   `json:"ProductStockAvailabilityDate"`
 	OrderID                      *int     `json:"OrderID"`
 	OrderItem                    *int     `json:"OrderItem"`
 	Project                      *string  `json:"Project"`
