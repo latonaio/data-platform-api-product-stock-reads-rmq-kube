@@ -7,37 +7,27 @@
     "runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
     "business_partner": 101,
     "service_label": "PRODUCT_STOCK",
-    "api_type": "",
+    "api_type": "reads",
     "message": {
         "ProductStock": {
-            "BusinessPartner": 101,
             "Product": "A3750",
+            "BusinessPartner": 101,
             "Plant": "AB01",
-            "Batch": "A001",
-            "OrderID": 14,
-            "OrderItem": 1,
-            "Project": null,
             "InventoryStockType": null,
             "InventorySpecialStockType": null,
             "ProductStock": 10
         },
-        "ProductStockAvailability": {
-            "BusinessPartner": 101,
-            "Product": "A3750",
-            "Plant": "AB01",
-            "Batch": "A001",
-            "ProductStockAvailabilityDate": "2023-02-15",
-            "OrderID": null,
-            "OrderItem": null,
-            "Project": null,
-            "InventoryStockType": null,
-            "InventorySpecialStockType": null,
-            "AvailableProductStock": 5
-        }
+        "ProductStockByBatch": null,
+        "ProductStockByStorageBin": null,
+        "ProductStockByStorageBinByBatch": null,
+        "ProductStockAvailability": null,
+        "ProductStockAvailabilityByBatch": null,
+        "ProductStockAvailabilityByStorageBin": null,
+        "ProductStockAvailabilityByStorageBinByBatch": null
     },
     "api_schema": "DPFMProductStockReads",
     "accepter": [
-        "All"
+        "ProductStock"
     ],
     "deleted": false,
     "sql_update_result": null,

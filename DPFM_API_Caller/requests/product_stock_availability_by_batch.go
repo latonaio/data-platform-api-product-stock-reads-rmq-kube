@@ -1,9 +1,10 @@
 package requests
 
-type ProductStockAvailability struct {
+type ProductStockAvailabilityByBatch struct {
 	Product                      string  `json:"Product"`
 	BusinessPartner              int     `json:"BusinessPartner"`
 	Plant                        string  `json:"Plant"`
+	Batch                        string  `json:"Batch"`
 	ProductStockAvailabilityDate string  `json:"ProductStockAvailabilityDate"`
 	InventoryStockType           *string `json:"InventoryStockType"`
 	InventorySpecialStockType    *string `json:"InventorySpecialStockType"`
