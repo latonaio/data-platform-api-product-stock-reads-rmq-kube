@@ -17,9 +17,21 @@ func ConvertToProductStock(rows *sql.Rows) (*ProductStock, error) {
 			&pm.Product,
 			&pm.BusinessPartner,
 			&pm.Plant,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
 			&pm.InventoryStockType,
-			&pm.InventorySpecialStockType,
 			&pm.ProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -33,12 +45,24 @@ func ConvertToProductStock(rows *sql.Rows) (*ProductStock, error) {
 
 	data := pm
 	productStock := &ProductStock{
-		BusinessPartner:           data.BusinessPartner,
-		Product:                   data.Product,
-		Plant:                     data.Plant,
-		InventoryStockType:        data.InventoryStockType,
-		InventorySpecialStockType: data.InventorySpecialStockType,
-		ProductStock:              data.ProductStock,
+		Product:                   					data.Product,
+		BusinessPartner:           					data.BusinessPartner,
+		Plant:                     					data.Plant,
+		SupplyChainRelationshipID:          		data.SupplyChainRelationshipID,
+		SupplyChainRelationshipDeliveryID:  		data.SupplyChainRelationshipDeliveryID,
+		SupplyChainRelationshipDeliveryPlantID:     data.BusinessPartner,
+		Buyer:           							data.Buyer,
+		Seller:           							data.Seller,
+		DeliverToParty:           					data.DeliverToParty,
+		DeliverFromParty:           				data.DeliverFromParty,
+		DeliverToPlant:                     		data.DeliverToPlant,
+		DeliverFromPlant:                     		data.DeliverFromPlant,		
+		InventoryStockType:        					data.InventoryStockType,
+		ProductStock:              					data.ProductStock,
+		CreationDate:              					data.CreationDate,
+		CreationTime:              					data.CreationTime,
+		LastChangeDate:              				data.LastChangeDate,
+		LastChangeTime:              				data.LastChangeTime,
 	}
 
 	return productStock, nil
