@@ -45,24 +45,24 @@ func ConvertToProductStock(rows *sql.Rows) (*ProductStock, error) {
 
 	data := pm
 	productStock := &ProductStock{
-		Product:                   					data.Product,
-		BusinessPartner:           					data.BusinessPartner,
-		Plant:                     					data.Plant,
-		SupplyChainRelationshipID:          		data.SupplyChainRelationshipID,
-		SupplyChainRelationshipDeliveryID:  		data.SupplyChainRelationshipDeliveryID,
-		SupplyChainRelationshipDeliveryPlantID:     data.BusinessPartner,
-		Buyer:           							data.Buyer,
-		Seller:           							data.Seller,
-		DeliverToParty:           					data.DeliverToParty,
-		DeliverFromParty:           				data.DeliverFromParty,
-		DeliverToPlant:                     		data.DeliverToPlant,
-		DeliverFromPlant:                     		data.DeliverFromPlant,		
-		InventoryStockType:        					data.InventoryStockType,
-		ProductStock:              					data.ProductStock,
-		CreationDate:              					data.CreationDate,
-		CreationTime:              					data.CreationTime,
-		LastChangeDate:              				data.LastChangeDate,
-		LastChangeTime:              				data.LastChangeTime,
+		Product:                                data.Product,
+		BusinessPartner:                        data.BusinessPartner,
+		Plant:                                  data.Plant,
+		SupplyChainRelationshipID:              data.SupplyChainRelationshipID,
+		SupplyChainRelationshipDeliveryID:      data.SupplyChainRelationshipDeliveryID,
+		SupplyChainRelationshipDeliveryPlantID: data.BusinessPartner,
+		Buyer:                                  data.Buyer,
+		Seller:                                 data.Seller,
+		DeliverToParty:                         data.DeliverToParty,
+		DeliverFromParty:                       data.DeliverFromParty,
+		DeliverToPlant:                         data.DeliverToPlant,
+		DeliverFromPlant:                       data.DeliverFromPlant,
+		InventoryStockType:                     data.InventoryStockType,
+		ProductStock:                           data.ProductStock,
+		CreationDate:                           data.CreationDate,
+		CreationTime:                           data.CreationTime,
+		LastChangeDate:                         data.LastChangeDate,
+		LastChangeTime:                         data.LastChangeTime,
 	}
 
 	return productStock, nil
@@ -75,13 +75,25 @@ func ConvertToProductStockByBatch(rows *sql.Rows) (*ProductStockByBatch, error) 
 	for rows.Next() {
 		i++
 		err := rows.Scan(
-			&pm.BusinessPartner,
 			&pm.Product,
+			&pm.BusinessPartner,
 			&pm.Plant,
 			&pm.Batch,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
 			&pm.InventoryStockType,
-			&pm.InventorySpecialStockType,
 			&pm.ProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -95,16 +107,150 @@ func ConvertToProductStockByBatch(rows *sql.Rows) (*ProductStockByBatch, error) 
 
 	data := pm
 	productStockByBatch := &ProductStockByBatch{
-		BusinessPartner:           data.BusinessPartner,
-		Product:                   data.Product,
-		Plant:                     data.Plant,
-		Batch:                     data.Batch,
-		InventoryStockType:        data.InventoryStockType,
-		InventorySpecialStockType: data.InventorySpecialStockType,
-		ProductStock:              data.ProductStock,
+			Product:								data.Product,
+			BusinessPartner:						data.BusinessPartner,
+			Plant:									data.Plant,
+			Batch:									data.Batch,
+			SupplyChainRelationshipID:				data.SupplyChainRelationshipID,
+			SupplyChainRelationshipDeliveryID:		data.SupplyChainRelationshipDeliveryID,
+			SupplyChainRelationshipDeliveryPlantID:	data.SupplyChainRelationshipDeliveryPlantID,
+			Buyer:									data.Buyer,
+			Seller:									data.Seller,
+			DeliverToParty:							data.DeliverToParty,
+			DeliverFromParty:						data.DeliverFromParty,
+			DeliverToPlant:							data.DeliverToPlant,
+			DeliverFromPlant:						data.DeliverFromPlant,
+			InventoryStockType:						data.InventoryStockType,
+			ProductStock:							data.ProductStock,
+			CreationDate:							data.CreationDate,
+			CreationTime:							data.CreationTime,
+			LastChangeDate:							data.LastChangeDate,
+			LastChangeTime:							data.LastChangeTime,
 	}
 
 	return productStockByBatch, nil
+}
+func ConvertToProductStockByOrder(rows *sql.Rows) (*ProductStockByOrder, error) {
+	defer rows.Close()
+	pm := &requests.ProductStockByOrder{}
+
+	i := 0
+	for rows.Next() {
+		i++
+		err := rows.Scan(
+			&pm.Product,
+			&pm.OrderID,
+			&pm.OrderItem,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
+			&pm.InventoryStockType,
+			&pm.ProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
+		)
+		if err != nil {
+			fmt.Printf("err = %+v \n", err)
+			return nil, err
+		}
+	}
+	if i == 0 {
+		fmt.Printf("DBに対象のレコードが存在しません。")
+		return nil, nil
+	}
+
+	data := pm
+	productStockByOrder := &ProductStockByOrder{
+		Product:                                data.Product,
+		OrderID:                                data.OrderID,
+		OrderItem:                              data.OrderItem,
+		SupplyChainRelationshipID:              data.SupplyChainRelationshipID,
+		SupplyChainRelationshipDeliveryID:      data.SupplyChainRelationshipDeliveryID,
+		SupplyChainRelationshipDeliveryPlantID: data.SupplyChainRelationshipDeliveryPlantID,
+		Buyer:                                  data.Buyer,
+		Seller:                                 data.Seller,
+		DeliverToParty:                         data.DeliverToParty,
+		DeliverFromParty:                       data.DeliverFromParty,
+		DeliverToPlant:                         data.DeliverToPlant,
+		DeliverFromPlant:                       data.DeliverFromPlant,
+		InventoryStockType:                     data.InventoryStockType,
+		ProductStock:                           data.ProductStock,
+		CreationDate:                           data.CreationDate,
+		CreationTime:                           data.CreationTime,
+		LastChangeDate:                         data.LastChangeDate,
+		LastChangeTime:                         data.LastChangeTime,
+	}
+
+	return productStockByOrder, nil
+}
+func ConvertToProductStockByProject(rows *sql.Rows) (*ProductStockByProject, error) {
+	defer rows.Close()
+	pm := &requests.ProductStockByProject{}
+
+	i := 0
+	for rows.Next() {
+		i++
+		err := rows.Scan(
+			&pm.Product,
+			&pm.Project,
+			&pm.WBSElement,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
+			&pm.InventoryStockType,
+			&pm.ProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
+		)
+		if err != nil {
+			fmt.Printf("err = %+v \n", err)
+			return nil, err
+		}
+	}
+	if i == 0 {
+		fmt.Printf("DBに対象のレコードが存在しません。")
+		return nil, nil
+	}
+
+	data := pm
+	productStockByProject := &ProductStockByProject{
+		Product:                                data.Product,
+		Project:                                data.Project,
+		WBSElement:                             data.WBSElement,
+		SupplyChainRelationshipID:              data.SupplyChainRelationshipID,
+		SupplyChainRelationshipDeliveryID:      data.SupplyChainRelationshipDeliveryID,
+		SupplyChainRelationshipDeliveryPlantID: data.SupplyChainRelationshipDeliveryPlantID,
+		Buyer:                                  data.Buyer,
+		Seller:                                 data.Seller,
+		DeliverToParty:                         data.DeliverToParty,
+		DeliverFromParty:                       data.DeliverFromParty,
+		DeliverToPlant:                         data.DeliverToPlant,
+		DeliverFromPlant:                       data.DeliverFromPlant,
+		InventoryStockType:                     data.InventoryStockType,
+		ProductStock:                           data.ProductStock,
+		CreationDate:                           data.CreationDate,
+		CreationTime:                           data.CreationTime,
+		LastChangeDate:                         data.LastChangeDate,
+		LastChangeTime:                         data.LastChangeTime,
+	}
+
+	return productStockByProject, nil
 }
 
 func ConvertToProductStockByStorageBin(rows *sql.Rows) (*ProductStockByStorageBin, error) {
@@ -120,9 +266,21 @@ func ConvertToProductStockByStorageBin(rows *sql.Rows) (*ProductStockByStorageBi
 			&pm.Plant,
 			&pm.StorageLocation,
 			&pm.StorageBin,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
 			&pm.InventoryStockType,
-			&pm.InventorySpecialStockType,
 			&pm.ProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -136,14 +294,26 @@ func ConvertToProductStockByStorageBin(rows *sql.Rows) (*ProductStockByStorageBi
 
 	data := pm
 	productStockByStorageBin := &ProductStockByStorageBin{
-		Product:                   data.Product,
-		BusinessPartner:           data.BusinessPartner,
-		Plant:                     data.Plant,
-		StorageLocation:           data.StorageLocation,
-		StorageBin:                data.StorageBin,
-		InventoryStockType:        data.InventoryStockType,
-		InventorySpecialStockType: data.InventorySpecialStockType,
-		ProductStock:              data.ProductStock,
+			Product:								data.Product,
+			BusinessPartner:						data.BusinessPartner,
+			Plant:									data.Plant,
+			StorageLocation:						data.StorageLocation,
+			StorageBin:								data.StorageBin,
+			SupplyChainRelationshipID:				data.SupplyChainRelationshipID,
+			SupplyChainRelationshipDeliveryID:		data.SupplyChainRelationshipDeliveryID,
+			SupplyChainRelationshipDeliveryPlantID:	data.SupplyChainRelationshipDeliveryPlantID,
+			Buyer:									data.Buyer,
+			Seller:									data.Seller,
+			DeliverToParty:							data.DeliverToParty,
+			DeliverFromParty:						data.DeliverFromParty,
+			DeliverToPlant:							data.DeliverToPlant,
+			DeliverFromPlant:						data.DeliverFromPlant,
+			InventoryStockType:						data.InventoryStockType,
+			ProductStock:							data.ProductStock,
+			CreationDate:							data.CreationDate,
+			CreationTime:							data.CreationTime,
+			LastChangeDate:							data.LastChangeDate,
+			LastChangeTime:							data.LastChangeTime,
 	}
 
 	return productStockByStorageBin, nil
@@ -163,9 +333,21 @@ func ConvertToProductStockByStorageBinByBatch(rows *sql.Rows) (*ProductStockBySt
 			&pm.StorageLocation,
 			&pm.StorageBin,
 			&pm.Batch,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
 			&pm.InventoryStockType,
-			&pm.InventorySpecialStockType,
 			&pm.ProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -179,15 +361,27 @@ func ConvertToProductStockByStorageBinByBatch(rows *sql.Rows) (*ProductStockBySt
 
 	data := pm
 	productStockByStorageBinByBatch := &ProductStockByStorageBinByBatch{
-		Product:                   data.Product,
-		BusinessPartner:           data.BusinessPartner,
-		Plant:                     data.Plant,
-		StorageLocation:           data.StorageLocation,
-		StorageBin:                data.StorageBin,
-		Batch:                     data.Batch,
-		InventoryStockType:        data.InventoryStockType,
-		InventorySpecialStockType: data.InventorySpecialStockType,
-		ProductStock:              data.ProductStock,
+			Product:								data.Product,
+			BusinessPartner:						data.BusinessPartner,
+			Plant:									data.Plant,
+			StorageLocation:						data.StorageLocation,
+			StorageBin:								data.StorageBin,
+			Batch:									data.Batch,
+			SupplyChainRelationshipID:				data.SupplyChainRelationshipID,
+			SupplyChainRelationshipDeliveryID:		data.SupplyChainRelationshipDeliveryID,
+			SupplyChainRelationshipDeliveryPlantID:	data.SupplyChainRelationshipDeliveryPlantID,
+			Buyer:									data.Buyer,
+			Seller:									data.Seller,
+			DeliverToParty:							data.DeliverToParty,
+			DeliverFromParty:						data.DeliverFromParty,
+			DeliverToPlant:							data.DeliverToPlant,
+			DeliverFromPlant:						data.DeliverFromPlant,
+			InventoryStockType:						data.InventoryStockType,
+			ProductStock:							data.ProductStock,
+			CreationDate:							data.CreationDate,
+			CreationTime:							data.CreationTime,
+			LastChangeDate:							data.LastChangeDate,
+			LastChangeTime:							data.LastChangeTime,
 	}
 
 	return productStockByStorageBinByBatch, nil
@@ -206,10 +400,21 @@ func ConvertToProductStockAvailability(rows *sql.Rows) (*[]ProductStockAvailabil
 			&pm.Product,
 			&pm.BusinessPartner,
 			&pm.Plant,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
 			&pm.ProductStockAvailabilityDate,
-			&pm.InventoryStockType,
-			&pm.InventorySpecialStockType,
 			&pm.AvailableProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -218,13 +423,24 @@ func ConvertToProductStockAvailability(rows *sql.Rows) (*[]ProductStockAvailabil
 
 		data := pm
 		productStockAvailability = append(productStockAvailability, ProductStockAvailability{
-			Product:                      data.Product,
-			BusinessPartner:              data.BusinessPartner,
-			Plant:                        data.Plant,
-			ProductStockAvailabilityDate: data.ProductStockAvailabilityDate,
-			InventoryStockType:           data.InventoryStockType,
-			InventorySpecialStockType:    data.InventorySpecialStockType,
-			AvailableProductStock:        data.AvailableProductStock,
+			Product:									data.Product,
+			BusinessPartner:							data.BusinessPartner,
+			Plant:										data.Plant,
+			SupplyChainRelationshipID:					data.SupplyChainRelationshipID,
+			SupplyChainRelationshipDeliveryID:			data.SupplyChainRelationshipDeliveryID,
+			SupplyChainRelationshipDeliveryPlantID:		data.SupplyChainRelationshipDeliveryPlantID,
+			Buyer:										data.Buyer,
+			Seller:										data.Seller,
+			DeliverToParty:								data.DeliverToParty,
+			DeliverFromParty:							data.DeliverFromParty,
+			DeliverToPlant:								data.DeliverToPlant,
+			DeliverFromPlant:							data.DeliverFromPlant,
+			ProductStockAvailabilityDate:				data.ProductStockAvailabilityDate,
+			AvailableProductStock:						data.AvailableProductStock,
+			CreationDate:								data.CreationDate,
+			CreationTime:								data.CreationTime,
+			LastChangeDate:								data.LastChangeDate,
+			LastChangeTime:								data.LastChangeTime,
 		})
 	}
 	if i == 0 {
@@ -277,7 +493,130 @@ func ConvertToProductStockAvailabilityByBatch(rows *sql.Rows) (*[]ProductStockAv
 
 	return &productStockAvailabilityByBatch, nil
 }
+func ConvertToProductStockAvailabilityByOrder(rows *sql.Rows) (*[]ProductStockAvailabilityByOrder, error) {
+	defer rows.Close()
+	productStockAvailabilityByOrder := make([]ProductStockAvailabilityByOrder, 0)
 
+	i := 0
+	for rows.Next() {
+		i++
+		pm := &requests.ProductStockAvailabilityByOrder{}
+
+		err := rows.Scan(
+			&pm.Product,
+			&pm.OrderID,
+			&pm.OrderItem,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
+			&pm.ProductStockAvailabilityDate,
+			&pm.AvailableProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
+		)
+		if err != nil {
+			fmt.Printf("err = %+v \n", err)
+			return &productStockAvailabilityByOrder, err
+		}
+		data := pm
+		productStockAvailabilityByOrder = append(productStockAvailabilityByOrder, ProductStockAvailabilityByOrder{
+			Product:                                data.Product,
+			OrderID:                                data.OrderID,
+			OrderItem:                              data.OrderItem,
+			SupplyChainRelationshipID:              data.SupplyChainRelationshipID,
+			SupplyChainRelationshipDeliveryID:      data.SupplyChainRelationshipDeliveryID,
+			SupplyChainRelationshipDeliveryPlantID: data.SupplyChainRelationshipDeliveryPlantID,
+			Buyer:                                  data.Buyer,
+			Seller:                                 data.Seller,
+			DeliverToParty:                         data.DeliverToParty,
+			DeliverFromParty:                       data.DeliverFromParty,
+			DeliverToPlant:                         data.DeliverToPlant,
+			DeliverFromPlant:                       data.DeliverFromPlant,
+			ProductStockAvailabilityDate:           data.ProductStockAvailabilityDate,
+			AvailableProductStock:                  data.AvailableProductStock,
+			CreationDate:                           data.CreationDate,
+			CreationTime:                           data.CreationTime,
+			LastChangeDate:                         data.LastChangeDate,
+			LastChangeTime:                         data.LastChangeTime,
+		})
+	}
+	if i == 0 {
+		fmt.Printf("DBに対象のレコードが存在しません。")
+		return &productStockAvailabilityByOrder, nil
+	}
+
+	return &productStockAvailabilityByOrder, nil
+}
+func ConvertToProductStockAvailabilityByProject(rows *sql.Rows) (*[]ProductStockAvailabilityByProject, error) {
+	defer rows.Close()
+	productStockAvailabilityByProject := make([]ProductStockAvailabilityByProject, 0)
+
+	i := 0
+	for rows.Next() {
+		i++
+		pm := &requests.ProductStockAvailabilityByProject{}
+
+		err := rows.Scan(
+			&pm.Product,
+			&pm.Project,
+			&pm.WBSElement,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
+			&pm.ProductStockAvailabilityDate,
+			&pm.AvailableProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
+		)
+		if err != nil {
+			fmt.Printf("err = %+v \n", err)
+			return &productStockAvailabilityByProject, err
+		}
+		data := pm
+		productStockAvailabilityByProject = append(productStockAvailabilityByProject, ProductStockAvailabilityByProject{
+			Product:                                data.Product,
+			Project:                                data.Project,
+			WBSElement:                             data.WBSElement,
+			SupplyChainRelationshipID:              data.SupplyChainRelationshipID,
+			SupplyChainRelationshipDeliveryID:      data.SupplyChainRelationshipDeliveryID,
+			SupplyChainRelationshipDeliveryPlantID: data.SupplyChainRelationshipDeliveryPlantID,
+			Buyer:                                  data.Buyer,
+			Seller:                                 data.Seller,
+			DeliverToParty:                         data.DeliverToParty,
+			DeliverFromParty:                       data.DeliverFromParty,
+			DeliverToPlant:                         data.DeliverToPlant,
+			DeliverFromPlant:                       data.DeliverFromPlant,
+			ProductStockAvailabilityDate:           data.ProductStockAvailabilityDate,
+			AvailableProductStock:                  data.AvailableProductStock,
+			CreationDate:                           data.CreationDate,
+			CreationTime:                           data.CreationTime,
+			LastChangeDate:                         data.LastChangeDate,
+			LastChangeTime:                         data.LastChangeTime,
+		})
+	}
+	if i == 0 {
+		fmt.Printf("DBに対象のレコードが存在しません。")
+		return &productStockAvailabilityByProject, nil
+	}
+
+	return &productStockAvailabilityByProject, nil
+}
 func ConvertToProductStockAvailabilityByStorageBin(rows *sql.Rows) (*[]ProductStockAvailabilityByStorageBin, error) {
 	defer rows.Close()
 	productStockAvailabilityByStorageBin := make([]ProductStockAvailabilityByStorageBin, 0)
@@ -293,10 +632,21 @@ func ConvertToProductStockAvailabilityByStorageBin(rows *sql.Rows) (*[]ProductSt
 			&pm.Plant,
 			&pm.StorageLocation,
 			&pm.StorageBin,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
 			&pm.ProductStockAvailabilityDate,
-			&pm.InventoryStockType,
-			&pm.InventorySpecialStockType,
 			&pm.AvailableProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -304,15 +654,26 @@ func ConvertToProductStockAvailabilityByStorageBin(rows *sql.Rows) (*[]ProductSt
 		}
 		data := pm
 		productStockAvailabilityByStorageBin = append(productStockAvailabilityByStorageBin, ProductStockAvailabilityByStorageBin{
-			Product:                      data.Product,
-			BusinessPartner:              data.BusinessPartner,
-			Plant:                        data.Plant,
-			StorageLocation:              data.StorageLocation,
-			StorageBin:                   data.StorageBin,
-			ProductStockAvailabilityDate: data.ProductStockAvailabilityDate,
-			InventoryStockType:           data.InventoryStockType,
-			InventorySpecialStockType:    data.InventorySpecialStockType,
-			AvailableProductStock:        data.AvailableProductStock,
+			Product:								data.Product,
+			BusinessPartner:						data.BusinessPartner,
+			Plant:									data.Plant,
+			StorageLocation:						data.StorageLocation,
+			StorageBin:								data.StorageBin,
+			SupplyChainRelationshipID:				data.SupplyChainRelationshipID,
+			SupplyChainRelationshipDeliveryID:		data.SupplyChainRelationshipDeliveryID,
+			SupplyChainRelationshipDeliveryPlantID:	data.SupplyChainRelationshipDeliveryPlantID,
+			Buyer:									data.Buyer,
+			Seller:									data.Seller,
+			DeliverToParty:							data.DeliverToParty,
+			DeliverFromParty:						data.DeliverFromParty,
+			DeliverToPlant:							data.DeliverToPlant,
+			DeliverFromPlant:						data.DeliverFromPlant,
+			ProductStockAvailabilityDate:			data.ProductStockAvailabilityDate,
+			AvailableProductStock:					data.AvailableProductStock,
+			CreationDate:							data.CreationDate,
+			CreationTime:							data.CreationTime,
+			LastChangeDate:							data.LastChangeDate,
+			LastChangeTime:							data.LastChangeTime,
 		})
 	}
 	if i == 0 {
@@ -338,10 +699,21 @@ func ConvertToProductStockAvailabilityByStorageBinByBatch(rows *sql.Rows) (*[]Pr
 			&pm.StorageLocation,
 			&pm.StorageBin,
 			&pm.Batch,
+			&pm.SupplyChainRelationshipID,
+			&pm.SupplyChainRelationshipDeliveryID,
+			&pm.SupplyChainRelationshipDeliveryPlantID,
+			&pm.Buyer,
+			&pm.Seller,
+			&pm.DeliverToParty,
+			&pm.DeliverFromParty,
+			&pm.DeliverToPlant,
+			&pm.DeliverFromPlant,
 			&pm.ProductStockAvailabilityDate,
-			&pm.InventoryStockType,
-			&pm.InventorySpecialStockType,
 			&pm.AvailableProductStock,
+			&pm.CreationDate,
+			&pm.CreationTime,
+			&pm.LastChangeDate,
+			&pm.LastChangeTime,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -349,16 +721,27 @@ func ConvertToProductStockAvailabilityByStorageBinByBatch(rows *sql.Rows) (*[]Pr
 		}
 		data := pm
 		productStockAvailabilityByStorageBinByBatch = append(productStockAvailabilityByStorageBinByBatch, ProductStockAvailabilityByStorageBinByBatch{
-			Product:                      data.Product,
-			BusinessPartner:              data.BusinessPartner,
-			Plant:                        data.Plant,
-			StorageLocation:              data.StorageLocation,
-			StorageBin:                   data.StorageBin,
-			Batch:                        data.Batch,
-			ProductStockAvailabilityDate: data.ProductStockAvailabilityDate,
-			InventoryStockType:           data.InventoryStockType,
-			InventorySpecialStockType:    data.InventorySpecialStockType,
-			AvailableProductStock:        data.AvailableProductStock,
+			Product:								data.Product,
+			BusinessPartner:						data.BusinessPartner,
+			Plant:									data.Plant,
+			StorageLocation:						data.StorageLocation,
+			StorageBin:								data.StorageBin,
+			Batch:									data.Batch,
+			SupplyChainRelationshipID:				data.SupplyChainRelationshipID,
+			SupplyChainRelationshipDeliveryID:		data.SupplyChainRelationshipDeliveryID,
+			SupplyChainRelationshipDeliveryPlantID:	data.SupplyChainRelationshipDeliveryPlantID,
+			Buyer:									data.Buyer,
+			Seller:									data.Seller,
+			DeliverToParty:							data.DeliverToParty,
+			DeliverFromParty:						data.DeliverFromParty,
+			DeliverToPlant:							data.DeliverToPlant,
+			DeliverFromPlant:						data.DeliverFromPlant,
+			ProductStockAvailabilityDate:			data.ProductStockAvailabilityDate,
+			AvailableProductStock:					data.AvailableProductStock,
+			CreationDate:							data.CreationDate,
+			CreationTime:							data.CreationTime,
+			LastChangeDate:							data.LastChangeDate,
+			LastChangeTime:							data.LastChangeTime,
 		})
 	}
 	if i == 0 {

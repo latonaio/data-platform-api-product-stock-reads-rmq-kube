@@ -105,14 +105,18 @@ func getAccepter(input *dpfm_api_input_reader.SDC) []string {
 
 	if accepter[0] == "All" {
 		accepter = []string{
-			"ProductStock", 
-			"ProductStockByBatch", 
-			"ProductStockByStorageBin", 
+			"ProductStock",
+			"ProductStockByBatch",
+			"ProductStockByStorageBin",
 			"ProductStockByStorageBinByBatch",
-			"ProductStockAvailability", 
-			"ProductStockAvailabilityByBatch", 
-			"ProductStockAvailabilityByStorageBin", 
+			"ProductStockByOrder",
+			"ProductStockByProject",
+			"ProductStockAvailability",
+			"ProductStockAvailabilityByBatch",
+			"ProductStockAvailabilityByStorageBin",
 			"ProductStockAvailabilityByStorageBinByBatch",
+			"ProductStockAvailabilityByOrder",
+			"ProductStockAvailabilityByProject",
 		}
 	}
 	return accepter

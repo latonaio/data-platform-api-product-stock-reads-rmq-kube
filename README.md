@@ -1,7 +1,8 @@
 # data-platform-api-product-stock-reads-rmq-kube
 
-data-platform-api-product-stock-reads-rmq-kube は、周辺業務システム　を データ連携基盤 と統合することを目的に、API で品目在庫データを登録するマイクロサービスです。  
-https://xxx.xxx.io/api/API_PRODUCT_STOCK_SRV/creates/
+data-platform-api-product-stock-reads-rmq-kube は、周辺業務システム　を データ連携基盤 と統合することを目的に、API で品目在庫データを取得するマイクロサービスです。  
+
+* https://xxx.xxx.io/api/API_PRODUCT_STOCK_SRV/reads/
 
 ## 動作環境
 
@@ -13,14 +14,23 @@ data-platform-api-product-stock-reads-rmq-kube の動作環境は、次の通り
 ## 本レポジトリ が 対応する API サービス
 data-platform-api-product-stock-reads-rmq-kube が対応する APIサービス は、次のものです。
 
-APIサービス URL: https://xxx.xxx.io/api/API_PRODUCT_STOCK_SRV/reads/
+* APIサービス URL: https://xxx.xxx.io/api/API_PRODUCT_STOCK_SRV/reads/
 
 ## 本レポジトリ に 含まれる API名
 data-platform-api-product-stock-reads-rmq-kube には、次の API をコールするためのリソースが含まれています。  
 
 * A_ProductStock（データ連携基盤 品目在庫 - 品目在庫データ）
+* A_ProductStockByBatch（データ連携基盤 品目在庫 - 品目ロット在庫データ）
+* A_ProductStockByStorageBin（データ連携基盤 品目在庫 - 品目棚番在庫データ）
+* A_ProductStockByStorageBinByBatch（データ連携基盤 品目在庫 - 品目棚番ロット在庫データ）
+* A_ProductStockByOrder（データ連携基盤 品目在庫 - 品目オーダー在庫データ）
+* A_ProductStockByProject（データ連携基盤 品目在庫 - 品目プロジェクト在庫データ）
 * A_ProductStockAvailability（データ連携基盤 品目在庫 - 品目在庫利用可能性データ）
- 
+* A_ProductStockAvailabilityByBatch（データ連携基盤 品目在庫 - 品目ロット在庫利用可能性データ）
+* A_ProductStockAvailabilityByStorageBin（データ連携基盤 品目在庫 - 品目棚番在庫利用可能性データ）
+* A_ProductStockAvailabilityByStorageBinByBatch（データ連携基盤 品目在庫 - 品目棚番ロット在庫利用可能性データ）
+* A_ProductStockAvailabilityByOrder（データ連携基盤 品目在庫 - 品目オーダー在庫利用可能性データ）
+* A_ProductStockAvailabilityByProject（データ連携基盤 品目在庫 - 品目プロジェクト在庫利用可能性データ）
 
 ## API への 値入力条件 の 初期値
 data-platform-api-product-stock-reads-rmq-kube において、API への値入力条件の初期値は、入力ファイルレイアウトの種別毎に、次の通りとなっています。  
@@ -38,8 +48,6 @@ accepter において 下記の例のように、データの種別（＝APIの�
 ```
 	"api_schema": "DPFMProductStockReads",
 	"accepter": ["ProductStock", "ProductStockAvailability"],
-	"product_stock": null,
-	"deleted": false
 ```
   
 * 全データを取得する際のsample.jsonの記載例(2)  
@@ -49,8 +57,6 @@ accepter において 下記の例のように、データの種別（＝APIの�
 ```
 	"api_schema": "DPFMProductStockReads",
 	"accepter": ["All"],
-	"product_stock": null,
-	"deleted": false
 ```
 
 ## 指定されたデータ種別のコール
@@ -59,7 +65,7 @@ accepter における データ種別 の指定に基づいて DPFM_API_Caller �
 caller.go の func() 毎 の 以下の箇所が、指定された API をコールするソースコードです。  
 
 ```
-func (c *DPFMAPICaller) AsyncProductStockReads(
+func (c *DPFMAPICaller) AsyncReads(
 	accepter []string,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
@@ -84,4 +90,3 @@ func (c *DPFMAPICaller) AsyncProductStockReads(
 ```
 XXX
 ```
-

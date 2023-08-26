@@ -21,10 +21,14 @@ func (c *DPFMAPICaller) readSqlProcess(
 ) interface{} {
 	var productStock *dpfm_api_output_formatter.ProductStock
 	var productStockByBatch *dpfm_api_output_formatter.ProductStockByBatch
+	var productStockByOrder *dpfm_api_output_formatter.ProductStockByOrder
+	var productStockByProject *dpfm_api_output_formatter.ProductStockByProject
 	var productStockByStorageBin *dpfm_api_output_formatter.ProductStockByStorageBin
 	var productStockByStorageBinByBatch *dpfm_api_output_formatter.ProductStockByStorageBinByBatch
 	var productStockAvailability *[]dpfm_api_output_formatter.ProductStockAvailability
 	var productStockAvailabilityByBatch *[]dpfm_api_output_formatter.ProductStockAvailabilityByBatch
+	var productStockAvailabilityByOrder *[]dpfm_api_output_formatter.ProductStockAvailabilityByOrder
+	var productStockAvailabilityByProject *[]dpfm_api_output_formatter.ProductStockAvailabilityByProject
 	var productStockAvailabilityByStorageBin *[]dpfm_api_output_formatter.ProductStockAvailabilityByStorageBin
 	var productStockAvailabilityByStorageBinByBatch *[]dpfm_api_output_formatter.ProductStockAvailabilityByStorageBinByBatch
 	for _, fn := range accepter {
@@ -36,6 +40,14 @@ func (c *DPFMAPICaller) readSqlProcess(
 		case "ProductStockByBatch":
 			func() {
 				productStockByBatch = c.ProductStockByBatch(mtx, input, output, errs, log)
+			}()
+		case "ProductStockByOrder":
+			func() {
+				productStockByOrder = c.ProductStockByOrder(mtx, input, output, errs, log)
+			}()
+		case "ProductStockByProject":
+			func() {
+				productStockByProject = c.ProductStockByProject(mtx, input, output, errs, log)
 			}()
 		case "ProductStockByStorageBin":
 			func() {
@@ -53,6 +65,14 @@ func (c *DPFMAPICaller) readSqlProcess(
 			func() {
 				productStockAvailabilityByBatch = c.ProductStockAvailabilityByBatch(mtx, input, output, errs, log)
 			}()
+		case "ProductStockAvailabilityByOrder":
+			func() {
+				productStockAvailabilityByOrder = c.ProductStockAvailabilityByOrder(mtx, input, output, errs, log)
+			}()
+		case "ProductStockAvailabilityByProject":
+			func() {
+				productStockAvailabilityByProject = c.ProductStockAvailabilityByProject(mtx, input, output, errs, log)
+			}()
 		case "ProductStockAvailabilityByStorageBin":
 			func() {
 				productStockAvailabilityByStorageBin = c.ProductStockAvailabilityByStorageBin(mtx, input, output, errs, log)
@@ -68,10 +88,14 @@ func (c *DPFMAPICaller) readSqlProcess(
 	data := &dpfm_api_output_formatter.Message{
 		ProductStock:                                productStock,
 		ProductStockByBatch:                         productStockByBatch,
+		ProductStockByOrder:                         productStockByOrder,
+		ProductStockByProject:                       productStockByProject,
 		ProductStockByStorageBin:                    productStockByStorageBin,
 		ProductStockByStorageBinByBatch:             productStockByStorageBinByBatch,
 		ProductStockAvailability:                    productStockAvailability,
 		ProductStockAvailabilityByBatch:             productStockAvailabilityByBatch,
+		ProductStockAvailabilityByOrder:             productStockAvailabilityByOrder,
+		ProductStockAvailabilityByProject:           productStockAvailabilityByProject,
 		ProductStockAvailabilityByStorageBin:        productStockAvailabilityByStorageBin,
 		ProductStockAvailabilityByStorageBinByBatch: productStockAvailabilityByStorageBinByBatch,
 	}
@@ -134,6 +158,69 @@ func (c *DPFMAPICaller) ProductStockByBatch(
 	defer rows.Close()
 
 	data, err := dpfm_api_output_formatter.ConvertToProductStockByBatch(rows)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+
+	return data
+}
+func (c *DPFMAPICaller) ProductStockByOrder(
+	mtx *sync.Mutex,
+	input *dpfm_api_input_reader.SDC,
+	output *dpfm_api_output_formatter.SDC,
+	errs *[]error,
+	log *logger.Logger,
+) *dpfm_api_output_formatter.ProductStockByOrder {
+	product := input.ProductStockByOrder.Product
+	businessPartner := input.ProductStockByOrder.BusinessPartner
+	plant := input.ProductStockByOrder.Plant
+	batch := input.ProductStockByOrder.Batch
+
+	rows, err := c.db.Query(
+		`SELECT *
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_stock_by_Order_data
+		WHERE (Product, BusinessPartner, Plant, Batch) = (?, ?, ?, ?);`, product, businessPartner, plant, batch,
+	)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+	defer rows.Close()
+
+	data, err := dpfm_api_output_formatter.ConvertToProductStockByOrder(rows)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+
+	return data
+}
+
+func (c *DPFMAPICaller) ProductStockByProject(
+	mtx *sync.Mutex,
+	input *dpfm_api_input_reader.SDC,
+	output *dpfm_api_output_formatter.SDC,
+	errs *[]error,
+	log *logger.Logger,
+) *dpfm_api_output_formatter.ProductStockByProject {
+	product := input.ProductStockByProject.Product
+	businessPartner := input.ProductStockByProject.BusinessPartner
+	plant := input.ProductStockByProject.Plant
+	batch := input.ProductStockByProject.Batch
+
+	rows, err := c.db.Query(
+		`SELECT *
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_stock_by_Project_data
+		WHERE (Product, BusinessPartner, Plant, Batch) = (?, ?, ?, ?);`, product, businessPartner, plant, batch,
+	)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+	defer rows.Close()
+
+	data, err := dpfm_api_output_formatter.ConvertToProductStockByProject(rows)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil
@@ -289,7 +376,86 @@ func (c *DPFMAPICaller) ProductStockAvailabilityByBatch(
 
 	return data
 }
+func (c *DPFMAPICaller) ProductStockAvailabilityByOrder(
+	mtx *sync.Mutex,
+	input *dpfm_api_input_reader.SDC,
+	output *dpfm_api_output_formatter.SDC,
+	errs *[]error,
+	log *logger.Logger,
+) *[]dpfm_api_output_formatter.ProductStockAvailabilityByOrder {
+	var args []interface{}
+	product := input.ProductStockByOrder.Product
+	businessPartner := input.ProductStockByOrder.BusinessPartner
+	plant := input.ProductStockByOrder.Plant
+	batch := input.ProductStockByOrder.Batch
+	productStockAvailabilityByOrder := input.ProductStockByOrder.ProductStockAvailabilityByOrder
 
+	cnt := 0
+	for _, v := range productStockAvailabilityByOrder {
+		args = append(args, product, businessPartner, plant, batch, v.ProductStockAvailabilityDate)
+		cnt++
+	}
+	repeat := strings.Repeat("(?,?,?,?,?),", cnt-1) + "(?,?,?,?,?)"
+
+	rows, err := c.db.Query(
+		`SELECT *
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_stock_availability_by_Order_data
+		WHERE (BusinessPartner, Product, Plant, Batch, ProductStockAvailabilityDate) IN ( `+repeat+` );`, args...,
+	)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+	defer rows.Close()
+
+	data, err := dpfm_api_output_formatter.ConvertToProductStockAvailabilityByOrder(rows)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+
+	return data
+}
+func (c *DPFMAPICaller) ProductStockAvailabilityByProject(
+	mtx *sync.Mutex,
+	input *dpfm_api_input_reader.SDC,
+	output *dpfm_api_output_formatter.SDC,
+	errs *[]error,
+	log *logger.Logger,
+) *[]dpfm_api_output_formatter.ProductStockAvailabilityByProject {
+	var args []interface{}
+	product := input.ProductStockByProject.Product
+	businessPartner := input.ProductStockByProject.BusinessPartner
+	plant := input.ProductStockByProject.Plant
+	batch := input.ProductStockByProject.Batch
+	productStockAvailabilityByProject := input.ProductStockByProject.ProductStockAvailabilityByProject
+
+	cnt := 0
+	for _, v := range productStockAvailabilityByProject {
+		args = append(args, product, businessPartner, plant, batch, v.ProductStockAvailabilityDate)
+		cnt++
+	}
+	repeat := strings.Repeat("(?,?,?,?,?),", cnt-1) + "(?,?,?,?,?)"
+
+	rows, err := c.db.Query(
+		`SELECT *
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_product_stock_availability_by_Project_data
+		WHERE (BusinessPartner, Product, Plant, Batch, ProductStockAvailabilityDate) IN ( `+repeat+` );`, args...,
+	)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+	defer rows.Close()
+
+	data, err := dpfm_api_output_formatter.ConvertToProductStockAvailabilityByProject(rows)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+
+	return data
+}
 func (c *DPFMAPICaller) ProductStockAvailabilityByStorageBin(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
