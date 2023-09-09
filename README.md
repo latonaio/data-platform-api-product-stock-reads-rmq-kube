@@ -19,18 +19,18 @@ data-platform-api-product-stock-reads-rmq-kube が対応する APIサービス �
 ## 本レポジトリ に 含まれる API名
 data-platform-api-product-stock-reads-rmq-kube には、次の API をコールするためのリソースが含まれています。  
 
-* A_ProductStock（データ連携基盤 品目在庫 - 品目在庫データ）
-* A_ProductStockByBatch（データ連携基盤 品目在庫 - 品目ロット在庫データ）
-* A_ProductStockByStorageBin（データ連携基盤 品目在庫 - 品目棚番在庫データ）
-* A_ProductStockByStorageBinByBatch（データ連携基盤 品目在庫 - 品目棚番ロット在庫データ）
-* A_ProductStockByOrder（データ連携基盤 品目在庫 - 品目オーダー在庫データ）
-* A_ProductStockByProject（データ連携基盤 品目在庫 - 品目プロジェクト在庫データ）
-* A_ProductStockAvailability（データ連携基盤 品目在庫 - 品目在庫利用可能性データ）
-* A_ProductStockAvailabilityByBatch（データ連携基盤 品目在庫 - 品目ロット在庫利用可能性データ）
-* A_ProductStockAvailabilityByStorageBin（データ連携基盤 品目在庫 - 品目棚番在庫利用可能性データ）
-* A_ProductStockAvailabilityByStorageBinByBatch（データ連携基盤 品目在庫 - 品目棚番ロット在庫利用可能性データ）
-* A_ProductStockAvailabilityByOrder（データ連携基盤 品目在庫 - 品目オーダー在庫利用可能性データ）
-* A_ProductStockAvailabilityByProject（データ連携基盤 品目在庫 - 品目プロジェクト在庫利用可能性データ）
+* A_ProductStock（品目在庫 - 品目在庫）
+* A_ProductStockByBatch（品目在庫 - 品目ロット在庫）
+* A_ProductStockByStorageBin（品目在庫 - 品目棚番在庫）
+* A_ProductStockByStorageBinByBatch（品目在庫 - 品目棚番ロット在庫）
+* A_ProductStockByOrder（品目在庫 - 品目オーダー在庫）
+* A_ProductStockByProject（品目在庫 - 品目プロジェクト在庫）
+* A_ProductStockAvailability（品目在庫 - 品目在庫利用可能性）
+* A_ProductStockAvailabilityByBatch（品目在庫 - 品目ロット在庫利用可能性）
+* A_ProductStockAvailabilityByStorageBin（品目在庫 - 品目棚番在庫利用可能性）
+* A_ProductStockAvailabilityByStorageBinByBatch（品目在庫 - 品目棚番ロット在庫利用可能性）
+* A_ProductStockAvailabilityByOrder（品目在庫 - 品目オーダー在庫利用可能性）
+* A_ProductStockAvailabilityByProject（品目在庫 - 品目プロジェクト在庫利用可能性）
 
 ## API への 値入力条件 の 初期値
 data-platform-api-product-stock-reads-rmq-kube において、API への値入力条件の初期値は、入力ファイルレイアウトの種別毎に、次の通りとなっています。  
@@ -85,7 +85,7 @@ func (c *DPFMAPICaller) AsyncReads(
 ## Output  
 本マイクロサービスでは、[golang-logging-library-for-data-platform](https://github.com/latonaio/golang-logging-library-for-data-platform) により、以下のようなデータがJSON形式で出力されます。  
 以下の sample.json の例は 品目在庫 の 品目在庫データ が取得された結果の JSON の例です。  
-以下の項目のうち、"BusinessPartner" ～ "ProductStock" は、/DPFM_API_Output_Formatter/type.go 内 の Type ProductStock {} による出力結果です。"cursor" ～ "time"は、golang-logging-library による 定型フォーマットの出力結果です。  
+以下の項目のうち、"Product" ～ "ProductStock" は、/DPFM_API_Output_Formatter/type.go 内 の Type ProductStock {} による出力結果です。"cursor" ～ "time"は、golang-logging-library による 定型フォーマットの出力結果です。  
 
 ```
 XXX
